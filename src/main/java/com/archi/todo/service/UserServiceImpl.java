@@ -6,6 +6,7 @@ import com.archi.todo.model.UserData;
 import com.archi.todo.repository.UserRepository;
 import com.google.common.hash.Hashing;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService{
 
+    @Autowired
     private UserRepository userRepository;
 
     @Override

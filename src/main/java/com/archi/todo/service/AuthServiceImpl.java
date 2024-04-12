@@ -4,6 +4,7 @@ import com.archi.todo.dto.LoginDTO;
 import com.archi.todo.model.UserData;
 import com.archi.todo.repository.UserRepository;
 import com.google.common.hash.Hashing;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.Optional;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+    @Autowired
     private UserRepository userRepository;
     private String secret = "secret";
 
@@ -34,6 +36,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity login(LoginDTO loginDTO) {
+        System.out.println(loginDTO.getUsername());
         try{
             Optional<UserData> userData = userRepository.findById(loginDTO.getUsername());
 
