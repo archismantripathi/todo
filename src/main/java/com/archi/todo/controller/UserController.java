@@ -25,9 +25,9 @@ public class UserController {
         return "this is get";
     }
 
-    @PatchMapping()
+    @PutMapping()
     public String updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
-        return "this is patch";
+        return "this is put";
     }
 
     @DeleteMapping()

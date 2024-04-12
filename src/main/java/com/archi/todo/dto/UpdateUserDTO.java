@@ -9,5 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UpdateUserDTO {
     private String fullName;
-    private String password;
+    private String oldPassword;
+    private String newPassword;
 }
