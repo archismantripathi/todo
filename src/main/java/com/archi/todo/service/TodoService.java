@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 public interface TodoService {
     ResponseEntity getTodoList(String s);
 
-    ResponseEntity newTodo(NewTodoDTO newTodoDTO);
+    ResponseEntity newTodo(NewTodoDTO newTodoDTO, String username);
 
     ResponseEntity updateTodo(UpdateTodoDTO updateTodoDTO, String s);
 
-    ResponseEntity deleteTodo(String s);
+    ResponseEntity clearTodo(String username);
 }

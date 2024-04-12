@@ -1,11 +1,15 @@
 package com.archi.todo.dto;
 
+import com.archi.todo.model.Todo;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.Setter;
 
-@Getter
+import java.util.List;
+
 @Setter
 @AllArgsConstructor
 public class GetTodoListDTO {
+    @JsonProperty("todoList")
+    private List<Todo> todoList;
 }

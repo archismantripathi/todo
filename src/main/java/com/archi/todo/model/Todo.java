@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Todo {
-
+    private String content;
+    private Boolean checked;
 }

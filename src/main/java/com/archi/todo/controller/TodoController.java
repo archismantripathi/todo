@@ -24,8 +24,8 @@ public class TodoController {
     }
 
     @PostMapping()
-    public ResponseEntity newTodo(@RequestBody NewTodoDTO newTodoDTO){
-        return todoService.newTodo(newTodoDTO);
+    public ResponseEntity newTodo(@RequestBody NewTodoDTO newTodoDTO, @RequestHeader("Authorization")String token){
+        return todoService.newTodo(newTodoDTO, authService.validateToken(token));
     }
 
     @PutMapping()
@@ -34,7 +34,7 @@ public class TodoController {
     }
 
     @DeleteMapping()
-    public ResponseEntity deleteTodo(@RequestHeader("Authorization") String token) {
-        return todoService.deleteTodo(authService.validateToken(token));
+    public ResponseEntity clearTodo(@RequestHeader("Authorization") String token) {
+        return todoService.clearTodo(authService.validateToken(token));
     }
 }
