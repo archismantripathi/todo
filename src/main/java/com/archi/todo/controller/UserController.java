@@ -24,18 +24,17 @@ public class UserController {
     }
 
     @GetMapping()
-    public String getUser(@RequestHeader("Authorization") String token) {
-        System.out.println(authService.validateToken(token));
-        return "this is get";
+    public ResponseEntity getUser(@RequestHeader("Authorization") String token) {
+        return userService.getUser(authService.validateToken(token));
     }
 
     @PutMapping()
-    public String updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
-        return "this is put";
+    public ResponseEntity updateUser(@RequestBody UpdateUserDTO updateUserDTO,@RequestHeader("Authorization")String token) {
+        return userService.updateUser(updateUserDTO, authService.validateToken(token));
     }
 
     @DeleteMapping()
-    public String deleteUser() {
-        return "this is delete";
+    public ResponseEntity deleteUser(@RequestHeader("Authorization") String token) {
+        return userService.deleteUser(authService.validateToken(token));
     }
 }

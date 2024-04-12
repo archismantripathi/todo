@@ -10,4 +10,6 @@ public interface UserService {
     ResponseEntity updateUser(UpdateUserDTO updateUserDTO, String username);
 
     ResponseEntity deleteUser(String username);
+
+    ResponseEntity getUser(String s);
 }

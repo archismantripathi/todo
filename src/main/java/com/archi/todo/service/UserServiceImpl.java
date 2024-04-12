@@ -1,5 +1,6 @@
 package com.archi.todo.service;
 
+import com.archi.todo.dto.GetUserDTO;
 import com.archi.todo.dto.NewUserDTO;
 import com.archi.todo.dto.UpdateUserDTO;
 import com.archi.todo.model.UserData;
@@ -50,7 +51,25 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public ResponseEntity getUser(String username) {
+        if (username==null) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Unauthorized");
+
+        Optional<UserData> data = userRepository.findById(username);
+
+        if(data.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+
+        GetUserDTO getUserDTO = GetUserDTO.builder()
+                .username(username)
+                .fullName(data.get().getFullName())
+                .build();
+
+        return ResponseEntity.accepted().body(getUserDTO);
+    }
+
+    @Override
     public ResponseEntity updateUser(UpdateUserDTO updateUserDTO, String username) {
+        if (username==null) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Unauthorized");
         try {
             Optional<UserData> currentData = userRepository.findById(username);
             if (currentData.isEmpty())
@@ -82,12 +101,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public ResponseEntity deleteUser(String username) {
+        if (username==null) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Unauthorized");
         try {
             if(userRepository.findById(username).isEmpty())
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
 
             userRepository.deleteById(username);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Removed: "+username);
+            return ResponseEntity.accepted().body("Removed: "+username);
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
