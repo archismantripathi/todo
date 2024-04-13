@@ -36,7 +36,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity login(LoginDTO loginDTO) {
-        System.out.println(loginDTO.getUsername());
         try{
             Optional<UserData> userData = userRepository.findById(loginDTO.getUsername());
 
@@ -47,7 +46,10 @@ public class AuthServiceImpl implements AuthService {
                     .hashString(loginDTO.getPassword(), StandardCharsets.UTF_8)
                     .toString();
             if(password.equals(userData.get().getPassword())) {
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(generateToken(loginDTO.getUsername(),this.secret));
+                return ResponseEntity
+                        .status(HttpStatus.ACCEPTED)
+                        .header("ok","true")
+                        .body("{\"token\":\""+generateToken(loginDTO.getUsername(),this.secret)+"\"}");
             }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Password mismatch");
         } catch (Exception e) {

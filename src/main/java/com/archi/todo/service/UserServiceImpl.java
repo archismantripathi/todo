@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService{
                     .hashString(newUserDTO.getPassword(), StandardCharsets.UTF_8)
                     .toString();
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Created: " +
+            return ResponseEntity.accepted().body("Created: " +
                 userRepository
                     .save(new UserData(
                             newUserDTO.getUsername(),

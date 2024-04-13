@@ -32,7 +32,6 @@ public class TodoServiceImpl implements TodoService{
             if(data.isEmpty())
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
 
-            System.out.println(new GetTodoListDTO(data.get().getTodoList()).toString());
             return ResponseEntity.accepted().body(new GetTodoListDTO(data.get().getTodoList()));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
