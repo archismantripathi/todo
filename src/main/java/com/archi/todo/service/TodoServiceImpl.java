@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,14 +26,22 @@ public class TodoServiceImpl implements TodoService{
 
     @Override
     public ResponseEntity getTodoList(String username) {
-        if (username==null) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Unauthorized");
+        if (username==null)
+            ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new HashMap<String, String>(){{put("message", "Error: Unauthorized");}});
         try {
             Optional<UserData> data = userRepository.findById(username);
 
             if(data.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(new HashMap<String, String>(){{put("message", "Error: User not found");}});
 
-            return ResponseEntity.accepted().body(new GetTodoListDTO(data.get().getTodoList()));
+            return ResponseEntity
+                    .accepted()
+                    .body(new HashMap<String, GetTodoListDTO>(){{put("message", new GetTodoListDTO(data.get().getTodoList()));}});
+
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
@@ -40,12 +49,17 @@ public class TodoServiceImpl implements TodoService{
 
     @Override
     public ResponseEntity newTodo(NewTodoDTO newTodoDTO, String username) {
-        if (username==null) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Unauthorized");
+        if (username==null)
+            ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new HashMap<String, String>(){{put("message", "Error: Unauthorized");}});
         try {
             Optional<UserData> data = userRepository.findById(username);
 
             if(data.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(new HashMap<String, String>(){{put("message", "Error: User not found");}});
 
             List<Todo> todoList = data.get().getTodoList();
 
@@ -66,7 +80,9 @@ public class TodoServiceImpl implements TodoService{
 
             userRepository.save(userData);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Added: New Todo");
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(new HashMap<String, NewTodoDTO>(){{put("message", newTodoDTO);}});
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
@@ -75,12 +91,17 @@ public class TodoServiceImpl implements TodoService{
 
     @Override
     public ResponseEntity updateTodo(UpdateTodoDTO updateTodoDTO, String username) {
-        if (username==null) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Unauthorized");
+        if (username==null)
+            ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new HashMap<String, String>(){{put("message", "Error: Unauthorized");}});
         try {
             Optional<UserData> data = userRepository.findById(username);
 
             if(data.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(new HashMap<String, String>(){{put("message", "Error: User not found");}});
 
             if(data.get().getTodoList()!=null && data.get().getTodoList().size()>updateTodoDTO.getIndex()) {
 
@@ -98,9 +119,14 @@ public class TodoServiceImpl implements TodoService{
 
                 userRepository.save(userData);
 
-                return ResponseEntity.accepted().body("Todo list updated");
+                return ResponseEntity
+                        .accepted()
+                        .body(new HashMap<String, String>(){{put("message", "Todo list updated");}});
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Entry doesn't exists");
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new HashMap<String, String>(){{put("message", "Entry doesn't exists");}});
+
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
@@ -108,12 +134,12 @@ public class TodoServiceImpl implements TodoService{
 
     @Override
     public ResponseEntity clearTodo(String username) {
-        if (username==null) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Unauthorized");
+        if (username==null) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new HashMap<String, String>(){{put("message", "Error: Unauthorized");}});
         try {
             Optional<UserData> data = userRepository.findById(username);
 
             if(data.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new HashMap<String, String>(){{put("message", "Error: User not found");}});
 
             UserData userData = UserData.builder()
                     .username(username)
@@ -125,7 +151,7 @@ public class TodoServiceImpl implements TodoService{
 
             userRepository.save(userData);
 
-            return ResponseEntity.accepted().body("Cleared all todo");
+            return ResponseEntity.accepted().body(new HashMap<String, String>(){{put("message", "Cleared all todo");}});
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());

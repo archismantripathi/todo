@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Optional;
 
 @Service
@@ -26,24 +27,31 @@ public class UserServiceImpl implements UserService{
     public ResponseEntity newUser(NewUserDTO newUserDTO) {
         try {
             if (userRepository.findById(newUserDTO.getUsername()).isPresent())
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Username already taken. Please try again");
+                return ResponseEntity
+                        .status(HttpStatus.CONFLICT)
+                        .body(new HashMap<String, String>(){{put("message", "Error: Username already taken. Please try again");}});
 
             if (newUserDTO.getUsername().isEmpty() || newUserDTO.getFullName().isEmpty() || newUserDTO.getPassword().length() < 8)
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Error: User data not acceptable");
+                return ResponseEntity
+                        .status(HttpStatus.NOT_ACCEPTABLE)
+                        .body(new HashMap<String, String>(){{put("message", "Error: User data not acceptable");}});
 
             String password = Hashing.sha256()
                     .hashString(newUserDTO.getPassword(), StandardCharsets.UTF_8)
                     .toString();
 
-            return ResponseEntity.accepted().body("Created: " +
-                userRepository
+            userRepository
                     .save(new UserData(
                             newUserDTO.getUsername(),
                             password,
                             newUserDTO.getFullName(),
                             true,
                             null)
-                    ).getUsername());
+                    );
+
+            return ResponseEntity
+                    .accepted()
+                    .body(new HashMap<String, String>(){{put("message", "Created: " + newUserDTO.getUsername());}});
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
@@ -52,28 +60,38 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public ResponseEntity getUser(String username) {
-        if (username==null) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Unauthorized");
+        if (username==null)
+            ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new HashMap<String, String>(){{put("message", "Error: Unauthorized");}});
 
         Optional<UserData> data = userRepository.findById(username);
 
         if(data.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new HashMap<String, String>(){{put("message", "Error: User not found");}});
 
         GetUserDTO getUserDTO = GetUserDTO.builder()
                 .username(username)
                 .fullName(data.get().getFullName())
                 .build();
 
-        return ResponseEntity.accepted().body(getUserDTO);
+        return ResponseEntity.accepted().body(new HashMap<String, GetUserDTO>(){{put("message", getUserDTO);}});
     }
 
     @Override
     public ResponseEntity updateUser(UpdateUserDTO updateUserDTO, String username) {
-        if (username==null) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Unauthorized");
+        if (username==null) ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new HashMap<String, String>(){{put("message", "Error: Unauthorized");}});
+
         try {
             Optional<UserData> currentData = userRepository.findById(username);
             if (currentData.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(new HashMap<String, String>(){{put("message", "Error: User not found");}});
 
             UserData userData = UserData.builder()
                     .username(username)
@@ -92,7 +110,9 @@ public class UserServiceImpl implements UserService{
                 userData.setPassword(password);
             }
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Updated: " + userRepository.save(userData).getUsername());
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(new HashMap<String, String>(){{put("message", "Updated: " + userRepository.save(userData).getUsername());}});
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
@@ -101,13 +121,20 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public ResponseEntity deleteUser(String username) {
-        if (username==null) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Unauthorized");
+        if (username==null) ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new HashMap<String, String>(){{put("message", "Error: Unauthorized");}});
+
         try {
             if(userRepository.findById(username).isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(new HashMap<String, String>(){{put("message", "Error: User not found");}});
 
             userRepository.deleteById(username);
-            return ResponseEntity.accepted().body("Removed: "+username);
+            return ResponseEntity
+                    .accepted()
+                    .body(new HashMap<String, String>(){{put("message", "Removed: "+username);}});
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());

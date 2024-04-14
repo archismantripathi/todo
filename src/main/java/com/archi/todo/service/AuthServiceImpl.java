@@ -4,12 +4,14 @@ import com.archi.todo.dto.auth.LoginDTO;
 import com.archi.todo.model.UserData;
 import com.archi.todo.repository.UserRepository;
 import com.google.common.hash.Hashing;
+import org.bson.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Optional;
 
 @Service
@@ -40,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
             Optional<UserData> userData = userRepository.findById(loginDTO.getUsername());
 
             if (userData.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new HashMap<String, String>(){{put("message", "Error: User not found");}});
 
             String password = Hashing.sha256()
                     .hashString(loginDTO.getPassword(), StandardCharsets.UTF_8)
@@ -49,9 +51,10 @@ public class AuthServiceImpl implements AuthService {
                 return ResponseEntity
                         .status(HttpStatus.ACCEPTED)
                         .header("ok","true")
-                        .body("{\"token\":\""+generateToken(loginDTO.getUsername(),this.secret)+"\"}");
+                        .body(new HashMap<String, String>(){{put("message", generateToken(loginDTO.getUsername(),secret));}});
             }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Password mismatch");
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new HashMap<String, String>(){{put("message", "Error: Password mismatch");}});
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
