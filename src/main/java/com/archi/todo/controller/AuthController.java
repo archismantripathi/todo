@@ -1,6 +1,6 @@
 package com.archi.todo.controller;
 
-import com.archi.todo.dto.LoginDTO;
+import com.archi.todo.dto.auth.LoginDTO;
 import com.archi.todo.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,8 @@
 package com.archi.todo.service;
 
-import com.archi.todo.dto.GetTodoListDTO;
-import com.archi.todo.dto.NewTodoDTO;
-import com.archi.todo.dto.UpdateTodoDTO;
+import com.archi.todo.dto.todo.GetTodoListDTO;
+import com.archi.todo.dto.todo.NewTodoDTO;
+import com.archi.todo.dto.todo.UpdateTodoDTO;
 import com.archi.todo.model.Todo;
 import com.archi.todo.model.UserData;
 import com.archi.todo.repository.UserRepository;

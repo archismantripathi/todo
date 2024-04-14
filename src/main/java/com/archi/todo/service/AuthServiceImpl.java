@@ -1,6 +1,6 @@
 package com.archi.todo.service;
 
-import com.archi.todo.dto.LoginDTO;
+import com.archi.todo.dto.auth.LoginDTO;
 import com.archi.todo.model.UserData;
 import com.archi.todo.repository.UserRepository;
 import com.google.common.hash.Hashing;

@@ -1,4 +1,4 @@
-package com.archi.todo.dto;
+package com.archi.todo.dto.todo;
 
 import com.archi.todo.model.Todo;
 import com.fasterxml.jackson.annotation.JsonProperty;

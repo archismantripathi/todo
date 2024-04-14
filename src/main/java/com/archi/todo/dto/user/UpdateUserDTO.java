@@ -1,4 +1,4 @@
-package com.archi.todo.dto;
+package com.archi.todo.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

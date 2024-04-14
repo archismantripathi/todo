@@ -1,7 +1,7 @@
 package com.archi.todo.controller;
 
-import com.archi.todo.dto.NewUserDTO;
-import com.archi.todo.dto.UpdateUserDTO;
+import com.archi.todo.dto.user.NewUserDTO;
+import com.archi.todo.dto.user.UpdateUserDTO;
 import com.archi.todo.service.AuthService;
 import com.archi.todo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

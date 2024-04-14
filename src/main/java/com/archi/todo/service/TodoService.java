@@ -1,7 +1,7 @@
 package com.archi.todo.service;
 
-import com.archi.todo.dto.NewTodoDTO;
-import com.archi.todo.dto.UpdateTodoDTO;
+import com.archi.todo.dto.todo.NewTodoDTO;
+import com.archi.todo.dto.todo.UpdateTodoDTO;
 import org.springframework.http.ResponseEntity;
 
 public interface TodoService {

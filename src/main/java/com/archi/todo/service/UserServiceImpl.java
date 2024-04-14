@@ -1,8 +1,8 @@
 package com.archi.todo.service;
 
-import com.archi.todo.dto.GetUserDTO;
-import com.archi.todo.dto.NewUserDTO;
-import com.archi.todo.dto.UpdateUserDTO;
+import com.archi.todo.dto.user.GetUserDTO;
+import com.archi.todo.dto.user.NewUserDTO;
+import com.archi.todo.dto.user.UpdateUserDTO;
 import com.archi.todo.model.UserData;
 import com.archi.todo.repository.UserRepository;
 import com.google.common.hash.Hashing;

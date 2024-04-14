@@ -1,7 +1,7 @@
 package com.archi.todo.service;
 
-import com.archi.todo.dto.NewUserDTO;
-import com.archi.todo.dto.UpdateUserDTO;
+import com.archi.todo.dto.user.NewUserDTO;
+import com.archi.todo.dto.user.UpdateUserDTO;
 import org.springframework.http.ResponseEntity;
 
 public interface UserService {
