@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResUpdateUserDTO {
-    private String fullName;
+    private Boolean fullName;
     private Boolean password;
 }

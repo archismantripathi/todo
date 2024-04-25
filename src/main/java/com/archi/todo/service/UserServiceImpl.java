@@ -95,23 +95,25 @@ public class UserServiceImpl implements UserService{
                         .status(HttpStatus.NOT_FOUND)
                         .body(new HashMap<String, String>(){{put("message", "Error: User not found");}});
 
-            UserData userData = UserData.builder()
-                    .username(username)
-                    .password(currentData.get().getPassword())
-                    .fullName(currentData.get().getFullName())
-                    .active(true)
-                    .todoList(currentData.get().getTodoList())
-                    .build();
-            if (updateUserDTO.getFullName()!=null&&!updateUserDTO.getFullName().isEmpty())
-                userData.setFullName(updateUserDTO.getFullName());
+            ResUpdateUserDTO res = ResUpdateUserDTO.builder().fullName(false).password(false).build();
+            String oldPassword = Hashing.sha256()
+                    .hashString(updateUserDTO.getOldPassword(), StandardCharsets.UTF_8)
+                    .toString();
 
-            ResUpdateUserDTO res = ResUpdateUserDTO.builder().fullName(userData.getFullName()).password(false).build();
+            if (Objects.equals(currentData.get().getPassword(), oldPassword)) {
+                UserData userData = UserData.builder()
+                        .username(username)
+                        .password(currentData.get().getPassword())
+                        .fullName(currentData.get().getFullName())
+                        .active(true)
+                        .todoList(currentData.get().getTodoList())
+                        .build();
+                if (updateUserDTO.getFullName() != null && !updateUserDTO.getFullName().isEmpty()) {
+                    userData.setFullName(updateUserDTO.getFullName());
+                    res.setFullName(true);
+                }
 
-            if (updateUserDTO.getOldPassword()!=null && updateUserDTO.getNewPassword()!=null && updateUserDTO.getNewPassword().length()>7) {
-                String oldPassword = Hashing.sha256()
-                        .hashString(updateUserDTO.getOldPassword(), StandardCharsets.UTF_8)
-                        .toString();
-                if (Objects.equals(currentData.get().getPassword(), oldPassword)) {
+                if (updateUserDTO.getOldPassword() != null && updateUserDTO.getNewPassword() != null && updateUserDTO.getNewPassword().length() > 7) {
                     String password = Hashing.sha256()
                             .hashString(updateUserDTO.getNewPassword(), StandardCharsets.UTF_8)
                             .toString();
