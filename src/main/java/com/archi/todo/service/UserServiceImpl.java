@@ -2,6 +2,7 @@ package com.archi.todo.service;
 
 import com.archi.todo.dto.user.GetUserDTO;
 import com.archi.todo.dto.user.NewUserDTO;
+import com.archi.todo.dto.user.ResUpdateUserDTO;
 import com.archi.todo.dto.user.UpdateUserDTO;
 import com.archi.todo.model.UserData;
 import com.archi.todo.repository.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -103,16 +105,24 @@ public class UserServiceImpl implements UserService{
             if (updateUserDTO.getFullName()!=null&&!updateUserDTO.getFullName().isEmpty())
                 userData.setFullName(updateUserDTO.getFullName());
 
+            ResUpdateUserDTO res = ResUpdateUserDTO.builder().fullName(userData.getFullName()).password(false).build();
+
             if (updateUserDTO.getOldPassword()!=null && updateUserDTO.getNewPassword()!=null && updateUserDTO.getNewPassword().length()>7) {
-                String password = Hashing.sha256()
-                        .hashString(updateUserDTO.getNewPassword(), StandardCharsets.UTF_8)
+                String oldPassword = Hashing.sha256()
+                        .hashString(updateUserDTO.getOldPassword(), StandardCharsets.UTF_8)
                         .toString();
-                userData.setPassword(password);
+                if (Objects.equals(currentData.get().getPassword(), oldPassword)) {
+                    String password = Hashing.sha256()
+                            .hashString(updateUserDTO.getNewPassword(), StandardCharsets.UTF_8)
+                            .toString();
+                    userData.setPassword(password);
+                    res.setPassword(true);
+                }
             }
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(new HashMap<String, String>(){{put("message", "Updated: " + userRepository.save(userData).getUsername());}});
+                    .body(new HashMap<String, ResUpdateUserDTO>(){{put("message", res);}});
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
