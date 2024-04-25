@@ -100,20 +100,21 @@ public class UserServiceImpl implements UserService{
                     .hashString(updateUserDTO.getOldPassword(), StandardCharsets.UTF_8)
                     .toString();
 
-            if (Objects.equals(currentData.get().getPassword(), oldPassword)) {
-                UserData userData = UserData.builder()
-                        .username(username)
-                        .password(currentData.get().getPassword())
-                        .fullName(currentData.get().getFullName())
-                        .active(true)
-                        .todoList(currentData.get().getTodoList())
-                        .build();
-                if (updateUserDTO.getFullName() != null && !updateUserDTO.getFullName().isEmpty()) {
-                    userData.setFullName(updateUserDTO.getFullName());
-                    res.setFullName(true);
-                }
 
-                if (updateUserDTO.getOldPassword() != null && updateUserDTO.getNewPassword() != null && updateUserDTO.getNewPassword().length() > 7) {
+            UserData userData = UserData.builder()
+                    .username(username)
+                    .password(currentData.get().getPassword())
+                    .fullName(currentData.get().getFullName())
+                    .active(true)
+                    .todoList(currentData.get().getTodoList())
+                    .build();
+            if (updateUserDTO.getFullName() != null && !updateUserDTO.getFullName().isEmpty()) {
+                userData.setFullName(updateUserDTO.getFullName());
+                res.setFullName(true);
+            }
+
+            if (updateUserDTO.getOldPassword() != null && updateUserDTO.getNewPassword() != null && updateUserDTO.getNewPassword().length() > 7) {
+                if (Objects.equals(currentData.get().getPassword(), oldPassword)) {
                     String password = Hashing.sha256()
                             .hashString(updateUserDTO.getNewPassword(), StandardCharsets.UTF_8)
                             .toString();
