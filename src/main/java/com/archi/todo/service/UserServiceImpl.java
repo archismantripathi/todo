@@ -123,6 +123,8 @@ public class UserServiceImpl implements UserService{
                 }
             }
 
+            userRepository.save(userData);
+
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(new HashMap<String, ResUpdateUserDTO>(){{put("message", res);}});
