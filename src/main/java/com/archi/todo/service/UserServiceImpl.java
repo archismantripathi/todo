@@ -96,10 +96,6 @@ public class UserServiceImpl implements UserService{
                         .body(new HashMap<String, String>(){{put("message", "Error: User not found");}});
 
             ResUpdateUserDTO res = ResUpdateUserDTO.builder().fullName(false).password(false).build();
-            String oldPassword = Hashing.sha256()
-                    .hashString(updateUserDTO.getOldPassword(), StandardCharsets.UTF_8)
-                    .toString();
-
 
             UserData userData = UserData.builder()
                     .username(username)
@@ -114,6 +110,10 @@ public class UserServiceImpl implements UserService{
             }
 
             if (updateUserDTO.getOldPassword() != null && updateUserDTO.getNewPassword() != null && updateUserDTO.getNewPassword().length() > 7) {
+                String oldPassword = Hashing.sha256()
+                        .hashString(updateUserDTO.getOldPassword(), StandardCharsets.UTF_8)
+                        .toString();
+
                 if (Objects.equals(currentData.get().getPassword(), oldPassword)) {
                     String password = Hashing.sha256()
                             .hashString(updateUserDTO.getNewPassword(), StandardCharsets.UTF_8)
